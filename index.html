@@ -5,77 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAIVA AI</title>
     <style>
-        /* 화면 전체를 검정색으로 채움 */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; }
         
-        /* 영상 설정 */
         video {
-            position: absolute; width: 100%; height: 100%; object-fit: cover;
-            display: none; /* 영상이 준비되기 전까지는 숨김 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 중앙 기준으로 꽉 채움 */
         }
 
-        /* 로딩 및 안내 메시지 */
-        #status-msg {
-            color: white; font-family: sans-serif; text-align: center; z-index: 100;
-        }
-
-        /* 시작 버튼 (자동재생이 안 될 경우 대비) */
-        #start-btn {
-            padding: 15px 30px; font-size: 18px; color: white; background: #03C75A;
-            border: none; border-radius: 30px; cursor: pointer; display: none; z-index: 101;
+        .skip-btn {
+            position: absolute; top: 20px; right: 20px;
+            padding: 10px 20px; background: rgba(255,255,255,0.3);
+            color: white; border: 1px solid white; border-radius: 20px;
+            cursor: pointer; z-index: 10; font-family: sans-serif;
         }
     </style>
 </head>
 <body>
 
-    <div id="status-msg">영상을 불러오고 있습니다...</div>
-    <button id="start-btn" onclick="playVideo()">영상 시작하기</button>
+    <button class="skip-btn" onclick="location.href='https://cafe.naver.com/knoukaiva'">Skip</button>
 
-    <video id="v" muted playsinline preload="auto">
+    <video id="v" autoplay muted playsinline>
         <source src="kaiva.mp4" type="video/mp4">
     </video>
 
     <script>
         const v = document.getElementById('v');
-        const msg = document.getElementById('status-msg');
-        const btn = document.getElementById('start-btn');
-        const cafeUrl = "https://cafe.naver.com/knoukaiva";
-
-        // 1. 영상이 재생 가능한 상태가 되면
-        v.oncanplaythrough = function() {
-            msg.style.display = 'none';
-            v.style.display = 'block';
-            
-            // 자동 재생 시도
-            const promise = v.play();
-            if (promise !== undefined) {
-                promise.catch(error => {
-                    // 자동 재생이 막혔을 경우 버튼 표시
-                    btn.style.display = 'block';
-                });
-            }
-        };
-
-        // 2. 영상이 시작되면 (성공 시 버튼 숨김)
-        v.onplaying = function() {
-            btn.style.display = 'none';
-        };
-
-        // 3. 영상이 끝나면 카페로 이동
-        v.onended = function() {
-            window.location.href = cafeUrl;
-        };
-
-        // 수동 재생 함수
-        function playVideo() {
-            v.play();
-            btn.style.display = 'none';
-        }
-
-        // 혹시 모르니 화면 아무데나 눌러도 재생되게 함
-        document.body.onclick = function() {
-            if (v.paused) v.play();
-        };
+        v.onended = () => location.href = "https://cafe.naver.com/knoukaiva";
+        document.body.onclick = () => v.play();
     </script>
 </body>
 </html>
