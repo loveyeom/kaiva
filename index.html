@@ -1,31 +1,54 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>KAIVA AR</title>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-  </head>
-  <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-marker preset="hiro">
-        <a-video 
-          src="https://github.com/loveyeom/kaiva/blob/main/kaiva.mp4" 
-          width="1.6" height="0.9" 
-          position="0 0.5 0" 
-          rotation="-90 0 0"
-          webkit-playsinline
-          playsinline>
-        </a-video>
-        <a-box 
-          position="0 0.1 0.8" 
-          scale="0.8 0.2 0.1" 
-          color="#03C75A" 
-          onclick="window.location.href='https://cafe.naver.com/knoukaiva'">
-          <a-text value="JOIN KAIVA" align="center" position="0 0 0.6" scale="0.5 0.5 0.5"></a-text>
-        </a-box>
-      </a-marker>
-      <a-entity camera><a-cursor></a-cursor></a-entity>
-    </a-scene>
-  </body>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIVA AI 영상 동아리</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000; }
+        /* 영상을 화면 가득 채우기 */
+        video {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto; object-fit: cover;
+        }
+        /* 우측 상단 건너뛰기 버튼 */
+        .skip-btn {
+            position: absolute; top: 20px; right: 20px;
+            padding: 10px 20px; background: rgba(255,255,255,0.2);
+            color: white; border: 1px solid white; border-radius: 20px;
+            cursor: pointer; z-index: 10; font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="skip-btn" onclick="goToCafe()">Skip & Join Cafe</button>
+
+    <video id="introVideo" autoplay muted playsinline>
+        <source src="https://github.com/loveyeom/kaiva/raw/main/kaiva.mp4" type="video/mp4">
+        브라우저가 영상을 지원하지 않습니다.
+    </video>
+
+    <script>
+        const video = document.getElementById('introVideo');
+        const cafeUrl = "https://cafe.naver.com/knoukaiva";
+
+        // 1. 영상이 끝나면 자동으로 카페 이동
+        video.onended = function() {
+            window.location.href = cafeUrl;
+        };
+
+        // 2. 버튼 누르면 바로 이동
+        function goToCafe() {
+            window.location.href = cafeUrl;
+        }
+
+        // 모바일 자동재생 대응 (터치 시 소리 켜기 등)
+        document.body.onclick = function() {
+            video.play();
+        };
+    </script>
+</body>
 </html>
